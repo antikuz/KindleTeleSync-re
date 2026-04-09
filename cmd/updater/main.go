@@ -15,6 +15,7 @@ import (
 )
 
 var RepoPath = "antikuz/KindleTeleSync-re"
+var GoArmVersion = "unknown"
 
 type GithubRelease struct {
 	TagName string        `json:"tag_name"`
@@ -75,10 +76,7 @@ func main() {
 
 	log.Printf("New version found: %s. Downloading...", latestVer)
 
-	targetArch := "arm7"
-	if goarm := os.Getenv("GOARM"); goarm != "" {
-		targetArch = "arm" + goarm
-	}
+	targetArch := "arm" + GoArmVersion
 
 	var assetUrl string
 	for _, asset := range release.Assets {

@@ -35,7 +35,7 @@ jobs:
           GOARM: ${{ matrix.goarm }}
           CGO_ENABLED: 0
         run: |
-          FLAGS="-s -w -extldflags=-static"
+          FLAGS="-s -w -extldflags=-static -X main.GoArmVersion=$GOARM"
           DEST="build/package/extensions/KindleTeleSync"
 
           go build -trimpath -ldflags="$FLAGS" -o "$DEST/kindle_sync_d" ./cmd/kindle_sync_d
