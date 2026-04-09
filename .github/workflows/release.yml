@@ -47,10 +47,11 @@ jobs:
           DEST="build/package/extensions/KindleTeleSync"
           upx --best --lzma "$DEST/kindle_sync_d" "$DEST/updater" "$DEST/webconfig"
 
-      - name: Set executable bit on binaries
+      - name: Set executable bit on binaries and shell scripts
         run: |
           DEST="build/package/extensions/KindleTeleSync"
           chmod +x "$DEST/kindle_sync_d" "$DEST/updater" "$DEST/webconfig"
+          chmod +x $DEST/*.sh
 
       - name: Copy README into package
         run: cp README.md build/package/extensions/KindleTeleSync/README.md
