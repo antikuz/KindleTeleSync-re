@@ -55,12 +55,14 @@ jobs:
       - name: Copy README into package
         run: cp README.md build/package/extensions/KindleTeleSync/README.md
       
-      - name: Patch config.xml with version and author
+      - name: Patch version.txt and config.xml with version and author
         run: |
           CONFIG="build/package/extensions/KindleTeleSync/config.xml"
+          VERSION_TXT="build/package/extensions/KindleTeleSync/version.txt"
           TAG="${{ github.ref_name }}"
           sed -i "s|<version>1.2.5</version>|<version>${TAG}</version>|" "$CONFIG"
           sed -i "s|<author>XroM</author>|<author>antikuz</author>|" "$CONFIG"
+          echo $TAG > "$VERSION_TXT"
       
       - name: Create release archive (GOARM ${{ matrix.goarm }})
         run: |
