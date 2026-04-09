@@ -1,0 +1,25 @@
+{
+	"items": [
+		{
+			"name": "KindleTeleSync",
+			"priority": -10,
+			"items": [
+				{
+					"name": "Запустить KindleTeleSync",
+					"priority": 100,
+					"action": "./KindleTeleSync.sh"
+				},
+				{
+					"name": "Запустить вебсервер настройки",
+					"priority": 100,
+					"action": "./web.sh"
+				},
+				{
+					"name": "Проверить обновления",
+					"priority": 100,
+					"action": "./update.sh"
+				}
+			]
+		}
+	]
+}
