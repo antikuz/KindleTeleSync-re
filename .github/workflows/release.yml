@@ -84,3 +84,16 @@ jobs:
         with:
           files: dist/*.tar.gz
           generate_release_notes: true
+          body: |
+            ## KindleTeleSync ${{ github.ref_name }}
+
+            ### Changes
+            ${{ steps.changelog.outputs.changes }}
+
+            ### Installation
+
+            Download the tarball matching your Kindle's ARM version:
+            - `KindleTeleSync-arm7.tar.gz` — most Kindles (Paperwhite 3+, Oasis, etc.)
+            - `KindleTeleSync-arm6.tar.gz` — older Kindles
+
+            Extract to `/mnt/us`
