@@ -1,0 +1,86 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        goarm: [6, 7]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Install UPX
+        run: sudo apt-get install -y upx
+
+      - name: Build binaries (GOARM ${{ matrix.goarm }})
+        env:
+          GOOS: linux
+          GOARCH: arm
+          GOARM: ${{ matrix.goarm }}
+          CGO_ENABLED: 0
+        run: |
+          FLAGS="-s -w -extldflags=-static"
+          DEST="build/package/extensions/KindleTeleSync"
+
+          go build -trimpath -ldflags="$FLAGS" -o "$DEST/kindle_sync_d" ./cmd/kindle_sync_d
+          go build -trimpath -ldflags="$FLAGS" -o "$DEST/updater"       ./cmd/updater
+          go build -trimpath -ldflags="$FLAGS" -o "$DEST/webconfig"     ./cmd/webconfig
+
+      - name: Compress with UPX
+        run: |
+          DEST="build/package/extensions/KindleTeleSync"
+          upx --best --lzma "$DEST/kindle_sync_d" "$DEST/updater" "$DEST/webconfig"
+
+      - name: Set executable bit on binaries
+        run: |
+          DEST="build/package/extensions/KindleTeleSync"
+          chmod +x "$DEST/kindle_sync_d" "$DEST/updater" "$DEST/webconfig"
+
+      - name: Copy README into package
+        run: cp README.md build/package/extensions/KindleTeleSync/README.md
+
+      - name: Create release archive (GOARM ${{ matrix.goarm }})
+        run: |
+          ARCHIVE="KindleTeleSync-arm${{ matrix.goarm }}.tar.gz"
+          cd build/package
+          tar -czf "../../$ARCHIVE" extensions koreader
+          cd ../..
+
+      - name: Upload archive as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KindleTeleSync-arm${{ matrix.goarm }}
+          path: KindleTeleSync-arm${{ matrix.goarm }}.tar.gz
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build-and-release
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.tar.gz
+          generate_release_notes: true
