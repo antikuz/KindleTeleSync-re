@@ -217,7 +217,7 @@ func processMessages(ctx context.Context, api *tg.Client, sender *message.Sender
 }
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
 	rootPath := config.DefaultConfig().RootPath
