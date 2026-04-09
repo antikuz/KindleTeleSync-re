@@ -48,14 +48,16 @@ func main() {
 		return
 	}
 
-	if err := addIptablesRule(); err != nil {
-		log.Fatalf("Warning: failed to add iptables rule: %v", err)
-	}
-	defer func() {
-		if err := removeIptablesRule(); err != nil {
-			log.Fatalf("Warning: failed to remove iptables rule: %v", err)
+	if _, err := exec.LookPath("iptables"); err == nil {
+		if err := addIptablesRule(); err != nil {
+			log.Fatalf("Warning: failed to add iptables rule: %v", err)
 		}
-	}()
+		defer func() {
+			if err := removeIptablesRule(); err != nil {
+				log.Fatalf("Warning: failed to remove iptables rule: %v", err)
+			}
+		}()
+    }
 
 	cfg, err := config.Load(configPath)
 	if err != nil {
