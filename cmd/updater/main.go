@@ -75,9 +75,9 @@ func main() {
 
 	log.Printf("New version found: %s. Downloading...", latestVer)
 
-	targetArch := "armv7"
+	targetArch := "arm7"
 	if goarm := os.Getenv("GOARM"); goarm != "" {
-		targetArch = "armv" + goarm
+		targetArch = "arm" + goarm
 	}
 
 	var assetUrl string
@@ -166,17 +166,10 @@ func main() {
 			return err
 		}
 
-		parts := strings.SplitN(rel, string(filepath.Separator), 2)
-		if len(parts) == 2 {
-			rel = parts[1]
-		}
-		if rel == "" {
-			return nil
-		}
-
-		if rel == "config.json" {
-			if _, err := os.Stat(filepath.Join(workingDirPath, "config.json")); err == nil {
-				log.Printf("Skipping config.json (user config exists)")
+		if filepath.Base(rel) == "config.json" {
+			dstConfigPath := filepath.Join(rootPath, rel)
+			if _, err := os.Stat(dstConfigPath); err == nil {
+				log.Printf("Skipping config.json (user config exists): %s", rel)
 				return nil
 			}
 		}
