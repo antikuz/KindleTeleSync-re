@@ -1,7 +1,7 @@
 #!/bin/sh
 killall webconfig 2>/dev/null
 IP=$(ip route get 1 | awk '{print $7}')
-URL="http://$IP:8080"
+URL="http://$IP:8880"
 ./webconfig qr "$URL"
 ./webconfig&
 PID=$!
