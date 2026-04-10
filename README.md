@@ -6,7 +6,7 @@
 
 Поскольку Telegram заблокирован в некоторых регионах, KindleTeleSync поддерживает **встроенные протоколы MTProto, SOCKS5 и HTTP-прокси**.
 > [!CAUTION]
-> Работа  проверена только на версии Kindle Paperwhite 5 (arm7)
+> Работа  проверена только на версии Kindle Paperwhite 5 (arm7) совместно с MTProto
 
 ## Требования
 - Джейлбрейк
