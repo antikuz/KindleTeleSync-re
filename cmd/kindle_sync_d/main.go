@@ -284,7 +284,7 @@ func main() {
 		InMemory:         true,
 		Session:          sessionMaker.SimpleSession(),
 		Resolver:         setupResolver(cfg),
-		DialTimeout:      120 * time.Second,
+		DialTimeout:      90 * time.Second,
 		DisableCopyright: true,
 	}
 	go func() {
