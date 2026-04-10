@@ -217,7 +217,7 @@ func processMessages(ctx context.Context, api *tg.Client, sender *message.Sender
 }
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 180*time.Second)
 	defer cancel()
 
 	rootPath := config.DefaultConfig().RootPath
@@ -248,7 +248,7 @@ func main() {
 		InMemory:         true,
 		Session:          sessionMaker.SimpleSession(),
 		Resolver:         setupResolver(cfg),
-		DialTimeout:      10 * time.Second,
+		DialTimeout:      120 * time.Second,
 		DisableCopyright: true,
 	}
 	go func() {
