@@ -1,5 +1,7 @@
 github.com/AnimeKaizoku/cacher v1.0.3-0.20250508132714-ddc7471efeef h1:y8llZexgesBazUg/zdIlrZKHPFJ2zk9YxlLAJ5x4DpQ=
 github.com/AnimeKaizoku/cacher v1.0.3-0.20250508132714-ddc7471efeef/go.mod h1:jw0de/b0K6W7Y3T9rHCMGVKUf6oG7hENNcssxYcZTCc=
+github.com/beevik/ntp v1.5.0 h1:y+uj/JjNwlY2JahivxYvtmv4ehfi3h74fAuABB9ZSM4=
+github.com/beevik/ntp v1.5.0/go.mod h1:mJEhBrwT76w9D+IfOEGvuzyuudiW9E52U2BaTrMOYow=
 github.com/celestix/gotgproto v1.0.0-beta22 h1:Iu78cFA08nV8+flmxKs9CJ3W73+HG30fx0nLOs5A6fI=
 github.com/celestix/gotgproto v1.0.0-beta22/go.mod h1:JYC9Js/5KLUhFR5M2RslQi2DFAcF7EdrgJMXo0YrzGQ=
 github.com/cenkalti/backoff/v4 v4.3.0 h1:MyRJ/UdXutAwSAT+s3wNd7MfTIcy71VQueUuFK343L8=

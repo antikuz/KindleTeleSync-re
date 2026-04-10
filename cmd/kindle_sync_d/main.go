@@ -12,9 +12,11 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/antikuz/KindleTeleSync-re/internal/config"
+	"github.com/beevik/ntp"
 	"github.com/celestix/gotgproto"
 	"github.com/celestix/gotgproto/sessionMaker"
 	"github.com/gotd/td/telegram/dcs"
@@ -34,6 +36,38 @@ const (
 func init() {
 	log.SetFlags(0)
 	log.SetPrefix(fmt.Sprintf("[%s] ", time.Now().Format("2006-01-02 15:04:05")))
+}
+
+// mtproto highly depends on correct date
+func syncClock() {
+    servers := []string{
+		"ru.pool.ntp.org",
+        "pool.ntp.org",
+        "time.cloudflare.com", 
+        "time.google.com",
+    }
+    
+    for _, server := range servers {
+        t, err := ntp.Time(server)
+        if err != nil {
+            log.Printf("NTP %s failed: %v", server, err)
+            continue
+        }
+        
+        tv := syscall.Timeval{
+            Sec:  t.Unix(),
+            Usec: int32(t.Nanosecond() / 1000),
+        }
+        if err := syscall.Settimeofday(&tv); err != nil {
+            log.Printf("Settimeofday failed: %v", err)
+            return
+        }
+        
+        log.Printf("Clock synced via %s", server)
+        return
+    }
+    
+    log.Printf("All NTP servers failed, continuing with system time")
 }
 
 // handles all MTProto, SOCKS5, and HTTP proxy logic
@@ -220,6 +254,8 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 180*time.Second)
 	defer cancel()
 
+	syncClock()
+	
 	rootPath := config.DefaultConfig().RootPath
 	if p := os.Getenv("KINDLE_ROOT"); p != "" {
 		rootPath = p
