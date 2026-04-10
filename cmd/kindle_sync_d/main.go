@@ -54,10 +54,7 @@ func syncClock() {
             continue
         }
         
-        tv := syscall.Timeval{
-            Sec:  t.Unix(),
-            Usec: int32(t.Nanosecond() / 1000),
-        }
+        tv := syscall.NsecToTimeval(t.UnixNano())
         if err := syscall.Settimeofday(&tv); err != nil {
             log.Printf("Settimeofday failed: %v", err)
             return
