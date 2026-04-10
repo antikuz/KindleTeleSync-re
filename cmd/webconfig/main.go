@@ -73,8 +73,17 @@ func main() {
 
 	http.HandleFunc("/save", func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
-		cfg.BotToken = r.FormValue("bot_token")
+		botToken := r.FormValue("bot_token")
 		chatID, _ := strconv.ParseInt(r.FormValue("chat_id"), 10, 64)
+		
+		// reset saved states if bot_token or chat_id changes
+		if cfg.ChatID != chatID || cfg.BotToken != botToken {
+			cfg.UpdatesState.Pts = 0
+			cfg.UpdatesState.Date = 0
+			cfg.UpdatesState.Qts = 0
+		}
+
+		cfg.BotToken = botToken
 		cfg.ChatID = chatID
 
 		exts := strings.Split(r.FormValue("allowed_extensions"), ",")
